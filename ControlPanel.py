@@ -49,43 +49,44 @@ ml_process.finish()  # Zakańcza proces uczenia maszynowego
 class SmartHomeControlPanel(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("Panel kontrolny inteligentnego domu")
+        self.title("Smart home control panel")
 
-        self.factory_settings_button = tk.Button(self, text="1) Ustawienia fabryczne",
+        self.factory_settings_button = tk.Button(self, text="1) Factory settings",
                                                  command=self.apply_factory_settings)
         self.factory_settings_button.pack()
 
-        self.ml_process_button = tk.Button(self, text="2) Zacznij 4-tygodniowy proces uczenia maszynowego",
+        self.ml_process_button = tk.Button(self, text="2) Start a 4-week machine learning process",
                                            command=self.start_ml_process)
         self.ml_process_button.pack()
 
-        self.alarm_phone_button = tk.Button(self, text="3) Włącz / wyłącz telefony alarmowe",
+        self.alarm_phone_button = tk.Button(self, text="3) Enable/disable emergency calls",
                                             command=self.toggle_alarm_phones)
         self.alarm_phone_button.pack()
 
-        self.add_to_routine_button = tk.Button(self, text="4) Dodaj coś ręcznie do rutyny", command=self.add_to_routine)
+        self.add_to_routine_button = tk.Button(self, text="4) Add something manually to your routine",
+                                               command=self.add_to_routine)
         self.add_to_routine_button.pack()
 
-        self.hamster_status = tk.Button(self, text="5) Status chomika", command=self.hamster_status)
+        self.hamster_status = tk.Button(self, text="5) Hamster status", command=self.hamster_status)
         self.hamster_status.pack()
 
-        self.close_button = tk.Button(self, text="6) Zamknij opcje", command=self.close_panel)
+        self.close_button = tk.Button(self, text="6) Close the menu", command=self.close_panel)
         self.close_button.pack()
 
         self.ml_process_running = False
         self.alarm_telephones = False
 
         self.last_hamster_status = {
-            "status": "żywy",
+            "status": "alive",
             "power_usage": 25,
             "feeding_status": "ok"
         }
 
     def apply_factory_settings(self):
-        result = messagebox.askyesno("Uwaga", "Czy na pewno chcesz zastosować ustawienia fabryczne?")
+        result = messagebox.askyesno("Warning", "Are you sure you want to apply factory settings?")
         if result:
             # Implementacja logiki dla ustawień fabrycznych
-            messagebox.showinfo("Informacja", "Ustawienia fabryczne zostały zastosowane.")
+            messagebox.showinfo("Info", "The factory settings have been applied.")
 
     def start_ml_process(self):
         def format_time_remaining(seconds):
@@ -93,34 +94,34 @@ class SmartHomeControlPanel(tk.Tk):
             hours = (seconds % (24 * 3600)) // 3600
             minutes = (seconds % 3600) // 60
             seconds = seconds % 60
-            formatted_time = f"{days} dni, {hours:02d} godzin, {minutes:02d} minut, {seconds:02d} sekund"
+            formatted_time = f"{days} days, {hours:02d} hours, {minutes:02d} minutes, {seconds:02d} seconds"
             return formatted_time
 
         # Implementacja logiki dla procesu uczenia maszynowego
         # Sprawdź, czy proces już wystartował i określ ile czasu zostało do końca
         if self.ml_process_running:
-            messagebox.showinfo("Informacja", "Proces uczenia maszynowego już trwa.")
+            messagebox.showinfo("Info", "The machine learning process is already underway.")
             # Oblicz pozostały czas i pokaż użytkownikowi
             time_remaining = ml_process.get_time_remaining()
             formatted_time = format_time_remaining(time_remaining)
-            messagebox.showinfo("Informacja", f"Pozostały czas do zakończenia procesu uczenia maszynowego:" 
+            messagebox.showinfo("Info", f"Remaining time to complete the machine learning process:" 
                                               f" {formatted_time}.")
         else:
             # Rozpocznij proces uczenia maszynowego
-            result = messagebox.askyesno("Uwaga", "Czy na pewno chcesz rozpocząć uczenie maszynowe? (Proces potrwa 4 "
-                                                  "tygodnie)")
+            result = messagebox.askyesno("Warning", "Are you sure to start machine learning? (Proccess will last 4 "
+                                                    "weeks)")
             if result:
-                messagebox.showinfo("Informacja", "Proces uczenia maszynowego został rozpoczęty.")
+                messagebox.showinfo("Info", "Machine learning started.")
                 ml_process.start()
                 self.ml_process_running = True
 
     def toggle_alarm_phones(self):
         if self.alarm_telephones:
             self.alarm_telephones = False
-            messagebox.showinfo("Telefony Alarmowe", "Wyłączono telefony alarmowe")
+            messagebox.showinfo("Emergency numbers", "Turned off emergency calls")
         else:
             self.alarm_telephones = True
-            messagebox.showinfo("Telefony Alarmowe", "Włączono telefony alarmowe")
+            messagebox.showinfo("Emergency numbers", "Turned on emergency calls")
         # Implementacja logiki dla włączania/wyłączania telefonów alarmowych
         # Zmień stan telefonów alarmowych i zaktualizuj interfejs użytkownika
         pass
@@ -128,11 +129,11 @@ class SmartHomeControlPanel(tk.Tk):
     def add_to_routine(self):
         # Implementacja logiki dla dodawania czynności do rutyny
 
-        dostepne_czynnosci = ["kawa", "budzik", "światła"]
-        dostepne_dni_tygodnia = ["poniedziałek", "wtorek", "środa", "czwartek", "piątek", "sobota", "niedziela"]
+        dostepne_czynnosci = ["coffee", "alarm", "lights"]
+        dostepne_dni_tygodnia = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
 
         while True:
-            czynnosc = simpledialog.askstring("Dodaj czynność", "Wprowadź nazwę czynności:")
+            czynnosc = simpledialog.askstring("Add routine", "Please add routine:")
 
             if czynnosc is None:
                 # Użytkownik kliknął Anuluj, zakończ funkcję bez dodawania czynności
@@ -142,10 +143,10 @@ class SmartHomeControlPanel(tk.Tk):
                 # Wprowadzona czynność jest poprawna, można ją dodać do rutyny
                 break
             else:
-                messagebox.showwarning("Błąd", "Wprowadzona czynność jest nieprawidłowa. Proszę spróbować ponownie.")
+                messagebox.showwarning("Error", "Incorrect action, please try again.")
 
         while True:
-            dzien_tygodnia = simpledialog.askstring("Dodaj czynność", "Wprowadź dzień tygodnia:")
+            dzien_tygodnia = simpledialog.askstring("Add routine", "Enter the day:")
 
             if dzien_tygodnia is None:
                 # Użytkownik kliknął Anuluj, zakończ funkcję bez dodawania czynności
@@ -155,11 +156,11 @@ class SmartHomeControlPanel(tk.Tk):
                 # Wprowadzony dzień tygodnia jest poprawny, można kontynuować
                 break
             else:
-                messagebox.showwarning("Błąd",
-                                       "Wprowadzony dzień tygodnia jest nieprawidłowy. Proszę spróbować ponownie.")
+                messagebox.showwarning("Error",
+                                       "Incorrect day, try again.")
 
         while True:
-            godzina = simpledialog.askstring("Dodaj czynność", "Wprowadź godzinę (format HH:MM):")
+            godzina = simpledialog.askstring("Add to routine", "Enter the hour (format HH:MM):")
 
             if godzina is None:
                 # Użytkownik kliknął Anuluj, zakończ funkcję bez dodawania czynności
@@ -175,16 +176,16 @@ class SmartHomeControlPanel(tk.Tk):
                     # Wprowadzona godzina jest w prawidłowym zakresie
                     break
                 else:
-                    messagebox.showwarning("Błąd", "Wprowadzona godzina jest nieprawidłowa. Proszę spróbować ponownie.")
+                    messagebox.showwarning("Error", "Incorrect time, try again.")
             else:
-                messagebox.showwarning("Błąd", "Wprowadzona godzina jest nieprawidłowa. Proszę spróbować ponownie.")
+                messagebox.showwarning("Error", "Incorrect time, try again.")
 
         # Tutaj można wykorzystać pobrane wartości i zaimplementować logikę dodawania czynności do rutyny
 
-        print("Dodano czynność do rutyny:")
-        print("Czynność:", czynnosc)
-        print("Dzień tygodnia:", dzien_tygodnia)
-        print("Godzina:", godzina)
+        print("Adding to routine:")
+        print("Action:", czynnosc)
+        print("Day:", dzien_tygodnia)
+        print("Hour:", godzina)
 
     def hamster_status(self):
         status_chomika = self.last_hamster_status["status"]
@@ -192,39 +193,41 @@ class SmartHomeControlPanel(tk.Tk):
         status_wyzywienia = self.last_hamster_status["feeding_status"]
 
         if status_chomika == "martwy":
-            messagebox.showinfo("Status chomika", "Chomik jest martwy.")
+            messagebox.showinfo("Hamster status", "Hamster is dead.")
             return
 
         if status_wyzywienia != "N/A":
-            if status_wyzywienia == "przekarmiony":
+            if status_wyzywienia == "overfed":
                 if random.random() < 0.05:
-                    status_wyzywienia = "najedzony"
-            elif status_wyzywienia == "niedożywiony":
+                    status_wyzywienia = "fed"
+            elif status_wyzywienia == "starving":
                 if random.random() < 0.05:
-                    status_wyzywienia = "najedzony"
+                    status_wyzywienia = "fed"
             else:  # status_wyzywienia == "najedzony"
                 if random.random() < 0.05:
                     losowa_wartosc = random.randint(0, 1)
                     if losowa_wartosc == 0:
-                        status_wyzywienia = "niedożywiony"
+                        status_wyzywienia = "starving"
                     else:
-                        status_wyzywienia = "przekarmiony"
+                        status_wyzywienia = "overfed"
 
-        zmiana_mocy = random.randint(-10, 10)
-        pobor_mocy = max(0, min(100, pobor_mocy + zmiana_mocy))
+        if status_chomika == "alive":
+            zmiana_mocy = random.randint(-10, 10)
+        if status_chomika == "alive":
+            pobor_mocy = max(0, min(100, pobor_mocy + zmiana_mocy))
 
-        if status_chomika == "żywy":
+        if status_chomika == "alive":
             if random.random() < 0.01:
-                status_chomika = "martwy"
+                status_chomika = "dead"
 
-        if status_chomika == "martwy":
+        if status_chomika == "dead":
             status_wyzywienia = "N/A"
             pobor_mocy = "N/A"
 
-        messagebox.showinfo("Status chomika",
-                            f"Status chomika: {status_chomika}\n"
-                            f"Pobór mocy: {pobor_mocy}\n"
-                            f"Status wyżywienia: {status_wyzywienia}")
+        messagebox.showinfo("Hamster",
+                            f"Hamster status: {status_chomika}\n"
+                            f"Power usage: {pobor_mocy}\n"
+                            f"Feed status: {status_wyzywienia}")
 
         self.last_hamster_status["status"] = status_chomika
         self.last_hamster_status["power_usage"] = pobor_mocy
