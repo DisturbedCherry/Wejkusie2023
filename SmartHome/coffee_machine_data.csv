@@ -1,4 +1,4 @@
-week;day;time;coffee_type;filter_status;coffe_status;water_status
+week;day;hour;coffee_type;filter_status;coffe_status;water_status
 1;monday;8:12;black;good;92%;84%
 1;monday;9:21;latte;medium;76%;62%
 1;tuesday;7:45;espresso;medium;54%;38%
